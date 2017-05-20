@@ -1,0 +1,215 @@
+<table>
+    <tr>
+        <td><canvas id=canvas1 width=600 height=400></td>
+        <td width=50></td>
+        <td valign=top>
+            <big><b>
+                Hermite curves.
+            </b></big>
+        </td>
+    </tr>
+</table>
+
+<script src=drawlib2.js></script>
+<script src=M.js></script>
+<script src=S.js></script>
+<script>
+   var m = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+
+   var Hermite = [ 2,-3,0,1,  -2,3,0,0,  1,-2,1,0,  1,-1,0,0 ];
+   var Hermite2 = [ 2,-3,0,1,  -2,3,0,0,  -1,2,-1,0,  -1,1,0,0 ];
+   var Hermite3 = [ -2,3,0,-1,  2,-3,0,0,  -1,2,-1,0,  -1,1,0,0 ];
+   var Hermite4 = [ -2,3,0,-1,  2,-3,0,0,  1,-2,1,0,  1,-1,0,0 ];
+   var Hermite5 = [ -1,2,-1,0,  -1,1,0,0, -2,3,0,-1,  2,-3,0,0];
+   var Hermite6 = [  1,-2,1,0,  1,-1,0,0, -2,3,0,-1,  2,-3,0,0];
+   var Hermite7 = [ 1,-2,1,0,  1,-1,0,0, 2,-3,0,1,  -2,3,0,0];
+   var Hermite8 = [  -1,2,-1,0,  -1,1,0,0, 2,-3,0,1,  -2,3,0,0];
+
+   function cubic(A, t) { return A[0] * t*t*t + A[1] * t*t + A[2] * t + A[3]; }
+
+   canvas1.update = function(g) {
+      g.lineCap = 'round';
+      g.lineJoin = 'round';
+      g.lineWidth = 1;
+
+      // OUTLINE THE CANVAS
+
+      g.beginPath();
+      g.moveTo(0,0);
+      g.lineTo(this.width,0);
+      g.lineTo(this.width,this.height);
+      g.lineTo(0,this.height);
+      g.lineTo(0,0);
+      g.stroke();
+
+//      var P = [
+//          [  .5,  0,  Math.sin(time*2)],
+//          [  0,  .5,  0],
+//		  [  0,  0,  .5],
+//      ];
+//      var R = [
+//          [  .5,  0,  Math.tan(time*2)],
+//          [  0,  .5,  0],
+//		  [  0,  0,  .5],
+//      ];
+//
+//      M.identity(m);
+//      M.save(m);
+//
+//         M.rotateY(m, Math.PI/4);
+//
+//         var curves = [];
+//
+//         for (var n = 0 ; n < P.length-1 ; n++) {
+//            var X = M.transform(Hermite, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+//            var Y = M.transform(Hermite, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+//            var Z = M.transform(Hermite, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+//
+//            var curve = [];
+//            for (var t = 0 ; t < 1.0001 ; t += 1/20){
+//               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+//            }
+//            curves.push(curve);
+//         }
+//
+//         this.drawCurves(m, curves );
+       var P = [
+           [ -.5, -.5,  0],
+           [  .5,  .5, Math.sin(time)],
+		   [  .5, -.5,  0],
+	   ];
+
+       var R = [
+           [   -1,   0,  0],
+           [   0,   .2,  Math.cos(time)],
+           [   -1,   0,  0],
+       ];              
+
+       M.identity(m);
+       M.save(m);
+
+       M.rotateY(m, Math.PI/4);
+
+       var curves = [];
+
+
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite2, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite2, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite2, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite3, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite3, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite3, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite4, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite4, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite4, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite5, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite5, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite5, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite6, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite6, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite6, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite7, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite7, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite7, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+
+       for (var n = 0 ; n < P.length-1 ; n++) {
+           var X = M.transform(Hermite8, [ P[n][0], P[n+1][0], R[n][0], R[n+1][0] ]);
+           var Y = M.transform(Hermite8, [ P[n][1], P[n+1][1], R[n][1], R[n+1][1] ]);
+           var Z = M.transform(Hermite8, [ P[n][2], P[n+1][2], R[n][2], R[n+1][2] ]);
+
+           var curve = [];
+           for (var t = 0 ; t < 1.0001 ; t += 1/20){
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+           }
+           curves.push(curve);
+       }
+
+         g.strokeStyle = 'black';
+         g.lineWidth = 3;
+         this.drawCurves(m, curves );
+         
+         M.rotateY(m, time*3);
+         M.scale(m ,.65)
+         g.strokeStyle = '#082f6d';
+         g.lineWidth = 0.1;
+         this.drawCurves(m, S.parametricMesh(S.sphere, 25, 50));
+       
+         M.rotateX(m, time*2);
+         M.scale(m ,.55)
+         g.strokeStyle = '#082f6d';
+         g.lineWidth = 0.15;
+         this.drawCurves(m, S.parametricMesh(S.sphere, 25, 50));
+       
+         M.rotateZ(m, time);
+         M.scale(m ,.45)
+         g.strokeStyle = '#082f6d';
+         g.lineWidth = 0.2;
+         this.drawCurves(m, S.parametricMesh(S.sphere, 25, 50));
+      M.restore(m);
+   }
+
+   drawCanvases([canvas1]);
+</script>
+
